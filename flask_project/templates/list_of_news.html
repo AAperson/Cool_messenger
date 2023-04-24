@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <div>
+        <h1>Новости</h1>
+        {% if current_user.is_authenticated %}
+            <a class="btn btn-primary" href="/add_news">Добавить новость</a>
+        {% endif %}
+    </div>
+    {% for item in news %}
+        {% if ((current_user.id|string in item.user.friends.split() or current_user.id == item.user.id) and item.is_private) or not item.is_private %}
+            <div>
+                <p>
+                    {% if item.user.foto == 0 %}
+                        <img src="{{ base_foto }}" alt="Картинка не найдена" class="round">
+                    {% else %}
+                        <img src="{{ url_for('get_image', img_id=item.user.foto) }}" alt="Картинка не найдена" class="round">
+                    {% endif %}
+                    {{ item.user.name }} {{ item.user.surname }} {{ item.created_date }}
+                </p>
+                <p>{{ item.about }}</p>
+                {% if item.img_id %}
+                    <img src="{{ url_for('get_image', img_id=item.img_id) }}" alt="Картинка не найдена" class="news-img">
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

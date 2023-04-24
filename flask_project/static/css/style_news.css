@@ -1,0 +1,16 @@
+h1{
+    text-align: center;
+}
+
+/* Стили для изображений */
+.round{
+    border-radius: 100%;
+    border: 3px solid grey;
+    box-shadow: 0 0 7px #666;
+    width: 3%;
+}
+
+.news-img{
+    width: 60%;
+    height: 60%;
+}
