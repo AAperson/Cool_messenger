@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form_friend">
+        <h6>Добавить друга</h6>
+        <form action="" method="post">
+            {{ form_friend.hidden_tag() }}
+
+            <p>
+                {{ form_friend.alias.label }}<br/>
+                {{ form_friend.alias(class="form-control") }}
+                {% for error in form_friend.alias.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
+
+            <p>{{ form_friend.submit(class="btn btn-primary", type="submit") }}</p>
+            <p>{{ message }}</p>
+        </form>
+    </div>
+    <div class="scroll-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Список чатов</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="scroll-table-body">
+            <table>
+                <tbody>
+                    <td>
+                        {% for friend in users %}
+                            <p>
+                                <a href="/chat/{{ current_user.id|string }}/{{ friend.id|string }}">
+                                    {% if friend.foto == 0 %}
+                                            <img src="{{ base_foto }}" alt="Картинка не найдена" class="round">
+                                    {% else %}
+                                        <img src="{{ url_for('get_image', img_id=friend.foto) }}" alt="Картинка не найдена" class="round">
+                                    {% endif %}
+                                </a>
+                                {{ friend.name }} {{ friend.surname }} {{ friend.alias }}
+                            </p>
+                        {% endfor %}
+                    </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="scroll-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Чат</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="scroll-table-body">
+            <table>
+                <tbody>
+                    <td>
+                        {% for item in messages %}
+                            {% if item.first_user_id == current_user.id %}
+                                <p style="text-align: right">{{ item.text }}</p>
+                            {% else %}
+                                <p style="text-align: left">{{ item.text }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <form action="" method="post">
+            {{ form_message.hidden_tag() }}
+
+            <p>
+                {{ form_message.text(class="form-control") }}
+                {{ form_message.submit(class="btn btn-primary", type="submit") }}
+            </p>
+        </form>
+    </div>
+{% endblock %}
